@@ -4,7 +4,7 @@ from services.strategy import StrategyService
 
 
 class EMA5BreakoutStrategy(StrategyService):
-    _enabled = False
+    _enabled = True
     _name = "EMA5Breakout"
 
     def __init__(self) -> None:
