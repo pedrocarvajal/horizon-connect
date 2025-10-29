@@ -1,4 +1,5 @@
-from models.tick import TickModel
+from typing import Any
+
 from services.logging import LoggingService
 from services.strategy import StrategyService
 
@@ -12,3 +13,6 @@ class EMA5BreakoutStrategy(StrategyService):
 
         self._log = LoggingService()
         self._log.setup("ema5_breakout_strategy")
+
+    def setup(self, **kwargs: Any) -> None:
+        super().setup(**kwargs)
