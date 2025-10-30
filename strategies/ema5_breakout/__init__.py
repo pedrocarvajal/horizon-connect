@@ -1,3 +1,4 @@
+from models.tick import TickModel
 from services.logging import LoggingService
 from services.strategy import StrategyService
 
@@ -11,3 +12,6 @@ class EMA5BreakoutStrategy(StrategyService):
 
         self._log = LoggingService()
         self._log.setup("ema5_breakout_strategy")
+
+    def on_tick(self, tick: TickModel) -> None:
+        pass
