@@ -18,40 +18,44 @@ class EMA5BreakoutStrategy(StrategyService):
 
         self._candles = {
             Timeframe.ONE_HOUR: CandleService(
-                timeframe=Timeframe.ONE_HOUR, on_close=self.on_close_1h_candle
+                timeframe=Timeframe.ONE_HOUR, on_close=self._on_close_1h_candle
             ),
             Timeframe.ONE_DAY: CandleService(
-                timeframe=Timeframe.ONE_DAY, on_close=self.on_close_1d_candle
+                timeframe=Timeframe.ONE_DAY, on_close=self._on_close_1d_candle
             ),
         }
 
     def on_tick(self, tick: TickModel) -> None:
         super().on_tick(tick)
 
-    def on_close_1h_candle(self, candle: CandlestickModel) -> None:
-        open = candle.open_price
-        high = candle.high_price
-        low = candle.low_price
-        close = candle.close_price
-        open_time = candle.kline_open_time
-        close_time = candle.kline_close_time
+    def _on_close_1h_candle(self, candle: CandlestickModel) -> None:
+        # open = candle.open_price
+        # high = candle.high_price
+        # low = candle.low_price
+        # close = candle.close_price
+        # open_time = candle.kline_open_time
+        # close_time = candle.kline_close_time
 
-        self._log.info(
-            f"[1H Candle Closed] "
-            f"Time: {open_time:%Y-%m-%d %H:%M} → {close_time:%Y-%m-%d %H:%M} | "
-            f"O: {open:.2f} H: {high:.2f} L: {low:.2f} C: {close:.2f}"
-        )
+        # self._log.info(
+        #     f"[1H Candle Closed] "
+        #     f"Time: {open_time:%Y-%m-%d %H:%M} → {close_time:%Y-%m-%d %H:%M} | "
+        #     f"O: {open:.2f} H: {high:.2f} L: {low:.2f} C: {close:.2f}"
+        # )
 
-    def on_close_1d_candle(self, candle: CandlestickModel) -> None:
-        open = candle.open_price
-        high = candle.high_price
-        low = candle.low_price
-        close = candle.close_price
-        open_time = candle.kline_open_time
-        close_time = candle.kline_close_time
+        pass
 
-        self._log.info(
-            f"[1D Candle Closed] "
-            f"Time: {open_time:%Y-%m-%d %H:%M} → {close_time:%Y-%m-%d %H:%M} | "
-            f"O: {open:.2f} H: {high:.2f} L: {low:.2f} C: {close:.2f}"
-        )
+    def _on_close_1d_candle(self, candle: CandlestickModel) -> None:
+        # open = candle.open_price
+        # high = candle.high_price
+        # low = candle.low_price
+        # close = candle.close_price
+        # open_time = candle.kline_open_time
+        # close_time = candle.kline_close_time
+
+        # self._log.info(
+        #     f"[1D Candle Closed] "
+        #     f"Time: {open_time:%Y-%m-%d %H:%M} → {close_time:%Y-%m-%d %H:%M} | "
+        #     f"O: {open:.2f} H: {high:.2f} L: {low:.2f} C: {close:.2f}"
+        # )
+
+        pass
