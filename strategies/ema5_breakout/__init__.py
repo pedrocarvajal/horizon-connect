@@ -33,10 +33,14 @@ class EMA5BreakoutStrategy(StrategyService):
         high = candle.high_price
         low = candle.low_price
         close = candle.close_price
+        open_time = candle.kline_open_time
+        close_time = candle.kline_close_time
 
-        # self._log.info(
-        #     f"1h Candle Closed: Open: {open} | High: {high} | Low: {low} | Close: {close}"
-        # )
+        self._log.info(
+            f"[1H Candle Closed] "
+            f"Time: {open_time:%Y-%m-%d %H:%M} → {close_time:%Y-%m-%d %H:%M} | "
+            f"O: {open:.2f} H: {high:.2f} L: {low:.2f} C: {close:.2f}"
+        )
 
     def on_close_1d_candle(self, candle: CandlestickModel) -> None:
         open = candle.open_price
