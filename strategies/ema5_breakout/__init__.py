@@ -1,6 +1,8 @@
 import datetime
 from typing import Optional
 
+from enums.order_side import OrderSide
+from enums.order_type import OrderType
 from enums.timeframe import Timeframe
 from indicators.ma import MAIndicator
 from models.order import OrderModel
@@ -44,6 +46,10 @@ class EMA5BreakoutStrategy(StrategyService):
     def on_new_day(self, tick: TickModel) -> None:
         self._calculate_previous_day_ema5_max(tick)
 
+    def on_transaction(self, order: OrderModel) -> None:
+        self._log.info("Transaction:")
+        self._log.debug(order.to_json())
+
     def _check_breakout(self, tick: TickModel) -> None:
         if not self._previous_day_ema5_max:
             return
@@ -59,6 +65,12 @@ class EMA5BreakoutStrategy(StrategyService):
             )
 
             order = OrderModel()
+            order.symbol = self.asset.symbol
+            order.gateway = self.asset.gateway.name
+            order.side = OrderSide.BUY
+            order.price = tick.price
+            order.volume = 0.01
+
             self.orderbook.push(order)
             self._do_we_have_open_positions = True
 
