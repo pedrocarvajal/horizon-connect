@@ -47,7 +47,7 @@ class EMA5BreakoutStrategy(StrategyService):
         self._calculate_previous_day_ema5_max(tick)
 
     def on_transaction(self, order: OrderModel) -> None:
-        self._log.info("Transaction:")
+        self._log.info("Transaction...")
         self._log.debug(order.to_json())
 
     def _check_breakout(self, tick: TickModel) -> None:
