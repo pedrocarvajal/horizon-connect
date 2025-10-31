@@ -29,6 +29,7 @@ class EMA5BreakoutStrategy(StrategyService):
         self._indicators = {
             "ema5": MAIndicator(
                 period=5,
+                price_to_use="close_price",
                 exponential=True,
                 candles=self._candles[Timeframe.ONE_HOUR].candles,
             ),
@@ -44,7 +45,6 @@ class EMA5BreakoutStrategy(StrategyService):
         )
 
     def _on_close_1h_candle(self, candle: CandlestickModel) -> None:
-        self._indicators["ema5"].refresh()
         open_time = candle.kline_open_time
         open_price = candle.open_price
         close_time = candle.kline_close_time
@@ -57,15 +57,7 @@ class EMA5BreakoutStrategy(StrategyService):
             ema5_date = ema5.date
             ema5_value = ema5.value
 
-            self._log.info(
-                f"Open time: {open_time} | "
-                f"Open price: {open_price} | "
-                f"Close time: {close_time} | "
-                f"Close price: {close_price} | "
-                f"High price: {high_price} | "
-                f"Low price: {low_price} | "
-                f"EMA5: ({ema5_date}) {ema5_value}"
-            )
+            self._log.info(f"EMA5: ({ema5_date}) {ema5_value}")
 
     def _on_close_1d_candle(self, candle: CandlestickModel) -> None:
         pass
