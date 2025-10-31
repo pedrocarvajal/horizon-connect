@@ -1,3 +1,5 @@
+import datetime
+
 from enums.timeframe import Timeframe
 from indicators.ma import MAIndicator
 from models.candlestick import CandlestickModel
@@ -11,6 +13,8 @@ class EMA5BreakoutStrategy(StrategyService):
     _enabled = True
     _name = "EMA5Breakout"
 
+    _previous_day_ema5_max: float
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -19,7 +23,7 @@ class EMA5BreakoutStrategy(StrategyService):
 
         self._candles = {
             Timeframe.ONE_HOUR: CandleService(
-                timeframe=Timeframe.ONE_HOUR, on_close=self._on_close_1h_candle
+                timeframe=Timeframe.ONE_HOUR,
             )
         }
 
@@ -32,14 +36,19 @@ class EMA5BreakoutStrategy(StrategyService):
             ),
         }
 
-    def on_tick(self, tick: TickModel) -> None:
-        super().on_tick(tick)
+    def on_new_hour(self, tick: TickModel) -> None:
+        pass
 
-    def _on_close_1h_candle(self, candle: CandlestickModel) -> None:
-        ema5 = self._indicators["ema5"]
-        if len(ema5.values) > 0:
-            ema5_value = ema5.values[-1]
-            ema5_date = ema5_value.date
-            ema5_value = ema5_value.value
+    def on_new_day(self, tick: TickModel) -> None:
+        self._calculate_previous_day_ema5_max(tick)
 
-            self._log.info(f"EMA5: ({ema5_date}) {ema5_value}")
+    def _calculate_previous_day_ema5_max(self, tick: TickModel) -> None:
+        today = tick.date
+        yesterday = today - datetime.timedelta(days=1)
+        self._previous_day_ema5_max = max(
+            [
+                ema5.value
+                for ema5 in self._indicators["ema5"].values
+                if ema5.date >= yesterday and ema5.date < today
+            ]
+        )
