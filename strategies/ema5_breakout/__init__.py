@@ -3,6 +3,7 @@ from typing import Optional
 
 from enums.timeframe import Timeframe
 from indicators.ma import MAIndicator
+from models.order import OrderModel
 from models.tick import TickModel
 from services.candle import CandleService
 from services.logging import LoggingService
@@ -57,6 +58,8 @@ class EMA5BreakoutStrategy(StrategyService):
                 f"Previous day EMA5 max: {self._previous_day_ema5_max}"
             )
 
+            order = OrderModel()
+            self.orderbook.push(order)
             self._do_we_have_open_positions = True
 
     def _calculate_previous_day_ema5_max(self, tick: TickModel) -> None:
