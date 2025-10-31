@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 
 from enums.timeframe import Timeframe
 from indicators.ma import MAIndicator
@@ -12,7 +13,8 @@ class EMA5BreakoutStrategy(StrategyService):
     _enabled = True
     _name = "EMA5Breakout"
 
-    _previous_day_ema5_max: float = None
+    _do_we_have_open_positions: bool = False
+    _previous_day_ema5_max: Optional[float] = None
 
     def __init__(self) -> None:
         super().__init__()
@@ -45,12 +47,17 @@ class EMA5BreakoutStrategy(StrategyService):
         if not self._previous_day_ema5_max:
             return
 
+        if self._do_we_have_open_positions:
+            return
+
         if tick.price > self._previous_day_ema5_max:
             self._log.info(
                 f"Breakout: {tick.date} | "
                 f"Opening price: {tick.price} | "
                 f"Previous day EMA5 max: {self._previous_day_ema5_max}"
             )
+
+            self._do_we_have_open_positions = True
 
     def _calculate_previous_day_ema5_max(self, tick: TickModel) -> None:
         today = tick.date
